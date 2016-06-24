@@ -14,6 +14,7 @@ import org.jivesoftware.smack.chat.Chat;
  * Created by Arthur on 6/8/2016.
  */
 public class MyService extends Service {
+    //TODO: change this to application server -AB
     private static final String DOMAIN = "Awesome-O";
     private static final String HOST = "10.0.2.2";
     private static final int PORT = 5222;

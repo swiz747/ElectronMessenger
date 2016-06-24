@@ -26,6 +26,7 @@ public class ChatMessage {
      * Probably shouldnt be a random integer due to possible conflicts
      * -AB
      * */
+    //TODO: probably something, just keep this in mind -AB
     public void setMsgID() {
 
         msgid += "-" + String.format("%02d", new Random().nextInt(100));

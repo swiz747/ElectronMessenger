@@ -237,7 +237,7 @@ public class MyXMPP {
         }
 
     }
-
+    //TODO: fix server string to not be retarded - AB
     public void sendMessage(ChatMessage chatMessage) {
         String body = gson.toJson(chatMessage);
 
