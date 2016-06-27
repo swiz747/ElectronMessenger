@@ -49,7 +49,9 @@ public class ChatAdapter extends BaseAdapter {
         ChatMessage message = (ChatMessage) chatMessageList.get(position);
         View vi = convertView;
         if (convertView == null)
+        {
             vi = inflater.inflate(R.layout.chat_bubble, null);
+        }
 
         TextView msg = (TextView) vi.findViewById(R.id.message_text);
         msg.setText(message.body);

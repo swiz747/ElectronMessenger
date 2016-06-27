@@ -47,7 +47,7 @@ public class Chats extends Fragment implements View.OnClickListener {
         chatlist = new ArrayList<ChatMessage>();
         chatAdapter = new ChatAdapter(getActivity(), chatlist);
         msgListView.setAdapter(chatAdapter);
-        sendTextMessage(view);
+
         return view;
     }
 
@@ -78,7 +78,10 @@ public class Chats extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sendMessageButton:
+            {
+
                 sendTextMessage(v);
+            }
 
         }
     }

@@ -21,12 +21,15 @@ import org.jivesoftware.smack.chat.ChatManagerListener;
 import org.jivesoftware.smack.chat.ChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Stanza;
+import org.jivesoftware.smack.roster.Roster;
+import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.receipts.DeliveryReceiptManager;
 import org.jivesoftware.smackx.receipts.ReceiptReceivedListener;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import fragments.Chats;
 
@@ -270,7 +273,20 @@ public class MyXMPP {
         }
 
     }
+    //TODO: add documentation explaining why this is convoluted and retarded, sorry :( -AB
+    public String getRoster()
+    {
+        String strFriends= "";
 
+        Roster roster = Roster.getInstanceFor(connection);
+        Collection<RosterEntry> entries = roster.getEntries();
+        for (RosterEntry entry : entries) {
+            strFriends = strFriends + entry +",";
+        }
+        strFriends = strFriends.substring(0,strFriends.length());
+        return strFriends;
+    }
+    //TODO: add packet listener for friend requests -AB
     public class XMPPConnectionListener implements ConnectionListener {
         @Override
         public void connected(final XMPPConnection connection) {

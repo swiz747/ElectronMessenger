@@ -28,9 +28,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
         {
             return new Chats();
         }
+        //TODO Holy shit this fucker caused issues, check 3rd tab before ripping hair out.
         else
         {
-            return new FriendsList();
+            return new Chats();
         }
     }
 
