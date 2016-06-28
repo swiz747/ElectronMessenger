@@ -18,7 +18,7 @@ public class MyService extends Service {
     private static final String DOMAIN = "tritium";
     private static final String HOST = "45.35.4.171";
     private static final int PORT = 5222;
-    private static final String USERNAME = "phoneApp";
+    private static final String USERNAME = "phoneapp";
     private static final String PASSWORD = "password";
     public static ConnectivityManager cm;
     public static MyXMPP xmpp;
