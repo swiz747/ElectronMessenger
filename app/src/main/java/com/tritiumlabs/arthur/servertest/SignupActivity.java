@@ -1,6 +1,7 @@
  package com.tritiumlabs.arthur.servertest;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,32 +11,44 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smackx.iqregister.AccountManager;
 
 
-public class SignupActivity extends AppCompatActivity {
+ public class SignupActivity extends AppCompatActivity
+ {
     private static final String TAG = "SignupActivity";
-   public static Authenticator tempXMPPConnection;
+    private static final int REQUEST_LOGIN= 0;
+    public static Authenticator tempXMPPConnection;
+     AccountManager accountManager;
     EditText nameText;
-    EditText emailText;
+    EditText userName;
     EditText passwordText;
     Button btnSignup;
     TextView loginLink;
 
-    
+
+
+
     @Override
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         nameText = (EditText)findViewById(R.id.input_name);
-        emailText = (EditText)findViewById(R.id.input_email);
-        passwordText = (EditText)findViewById(R.id.input_password);
+        userName = (EditText)findViewById(R.id.input_email);
+        passwordText = (EditText) findViewById(R.id.input_password);
         btnSignup = (Button)findViewById(R.id.btn_signup);
         loginLink = (TextView)findViewById(R.id.link_login);
         //TODO: there are now 3 places that have this hard coded, we need a global constant or something, maybe pop it in an sqlite table? - AB
         tempXMPPConnection = new Authenticator(this,"tritium","45.35.4.171",5222);
+        //TODO: this is for easy testing because im lazy -AB
+        nameText.setText("tester");
+        userName.setText("Dildo@gmail.com");
+        passwordText.setText("fuck123");
 
-                btnSignup.setOnClickListener(new View.OnClickListener() {
+        btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signup();
@@ -45,7 +58,9 @@ public class SignupActivity extends AppCompatActivity {
         loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Finish the registration screen and return to the Login activity
+                // "finish" the registration screen and return to the Login activity -AB
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivityForResult(intent, REQUEST_LOGIN);
                 finish();
             }
         });
@@ -59,6 +74,7 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
+
         btnSignup.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
@@ -67,19 +83,35 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
 
-        String name = nameText.getText().toString();
-        String email = emailText.getText().toString();
-        String password = passwordText.getText().toString();
+        final String name = nameText.getText().toString();
+        final String user = userName.getText().toString();
+        final String password = passwordText.getText().toString();
+        tempXMPPConnection.connect("Signup");
+        accountManager = AccountManager.getInstance(tempXMPPConnection.connection);
+
 
         // TODO: Implement your own signup logic here.
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
+
+
+                        try {
+                            accountManager.createAccount(name, password);
+                        } catch (XMPPException e1) {
+                            Log.d(e1.getMessage(), String.valueOf(e1));
+                            onSignupFailed();
+                        } catch (SmackException.NotConnectedException e) {
+                            e.printStackTrace();
+                            onSignupFailed();
+                        } catch (SmackException.NoResponseException e) {
+                            e.printStackTrace();
+                            onSignupFailed();
+                        }
                         // On complete call either onSignupSuccess or onSignupFailed
                         // depending on success
                         onSignupSuccess();
-                        // onSignupFailed();
                         progressDialog.dismiss();
                     }
                 }, 3000);
@@ -89,20 +121,22 @@ public class SignupActivity extends AppCompatActivity {
     public void onSignupSuccess() {
         btnSignup.setEnabled(true);
         setResult(RESULT_OK, null);
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivityForResult(intent, REQUEST_LOGIN);
         finish();
     }
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Signup failed", Toast.LENGTH_LONG).show();
 
         btnSignup.setEnabled(true);
     }
-
+    //TODO make logical password reqs -AB
     public boolean validate() {
         boolean valid = true;
 
         String name = nameText.getText().toString();
-        String email = emailText.getText().toString();
+        String email = userName.getText().toString();
         String password = passwordText.getText().toString();
 
         if (name.isEmpty() || name.length() < 3) {
@@ -113,10 +147,10 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailText.setError("enter a valid email address");
+            userName.setError("enter a valid email address");
             valid = false;
         } else {
-            emailText.setError(null);
+            userName.setError(null);
         }
 
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {

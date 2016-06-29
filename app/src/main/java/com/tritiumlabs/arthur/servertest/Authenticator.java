@@ -8,30 +8,17 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
-import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.chat.ChatManager;
-import org.jivesoftware.smack.chat.ChatManagerListener;
-import org.jivesoftware.smack.chat.ChatMessageListener;
-import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Stanza;
-import org.jivesoftware.smack.roster.Roster;
-import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
-import org.jivesoftware.smackx.iqregister.AccountManager;
 import org.jivesoftware.smackx.receipts.DeliveryReceiptManager;
 import org.jivesoftware.smackx.receipts.ReceiptReceivedListener;
 
 import java.io.IOException;
-import java.util.Collection;
-
-import fragments.Chats;
 
 public class Authenticator {
 
@@ -56,7 +43,6 @@ public class Authenticator {
         this.port = port;
         this.context = context;
         init();
-        connect("Authentoicator");
 
     }
 
