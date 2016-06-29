@@ -7,23 +7,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.tritiumlabs.arthur.servertest.ChatAdapter;
-import com.tritiumlabs.arthur.servertest.ChatMessage;
-import com.tritiumlabs.arthur.servertest.CommonMethods;
 import com.tritiumlabs.arthur.servertest.FriendslistAdapter;
 import com.tritiumlabs.arthur.servertest.MainActivity;
 import com.tritiumlabs.arthur.servertest.R;
 
-import org.jivesoftware.smack.roster.Roster;
+
 
 
 
 public class FriendsList extends Fragment {
 
 
-
+    String friendString = "";
     public static FriendslistAdapter friendslistAdapter;
     ListView lstView_Friends;
     @Override
@@ -40,7 +36,7 @@ public class FriendsList extends Fragment {
 
 
         MainActivity activity = ((MainActivity) getActivity());
-        String friendString = activity.getmService().xmpp.getRoster();
+        friendString = activity.getmService().xmpp.getRoster();
         friendslistAdapter = new FriendslistAdapter(getActivity(), friendString);
         lstView_Friends.setAdapter(friendslistAdapter);
         friendslistAdapter.notifyDataSetChanged();

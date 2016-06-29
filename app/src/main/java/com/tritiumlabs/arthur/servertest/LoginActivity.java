@@ -33,6 +33,11 @@ public class LoginActivity extends AppCompatActivity {
         passwordText = (EditText)findViewById(R.id.input_password);
         btnLogin = (Button)findViewById(R.id.btn_login);
         signupLink = (TextView)findViewById(R.id.link_signup);
+
+        //TODO: this is for easy testing because im lazy -AB
+
+        userName.setText("Dildo@gmail.com");
+        passwordText.setText("fuck123");
         
         btnLogin.setOnClickListener(new View.OnClickListener() {
 
@@ -106,7 +111,8 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         btnLogin.setEnabled(true);
-        finish();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     public void onLoginFailed() {

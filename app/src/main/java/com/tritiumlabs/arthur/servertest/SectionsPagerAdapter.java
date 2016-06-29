@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import fragments.Chats;
 import fragments.FriendsList;
+import fragments.SomethingElse;
 
 /**
  * Created by Arthur on 6/8/2016.
@@ -22,7 +23,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
     public Fragment getItem(int position) {
         if (position == 0)
         {
-            return new FriendsList();
+            return new SomethingElse();
         }
         else if(position == 1)
         {
@@ -31,7 +32,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
         //TODO Holy shit this fucker caused issues, check 3rd tab before ripping hair out.
         else
         {
-            return new Chats();
+            return new FriendsList();
         }
     }
 
@@ -45,11 +46,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "Friends List";
+                return "Something Else";
             case 1:
                 return "Chat";
             case 2:
-                return "Something Else";
+                return "Friends List";
         }
         return null;
     }
