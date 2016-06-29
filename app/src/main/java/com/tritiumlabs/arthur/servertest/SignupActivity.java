@@ -14,12 +14,13 @@ import android.widget.Toast;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
-
+   public static Authenticator tempXMPPConnection;
     EditText nameText;
     EditText emailText;
     EditText passwordText;
     Button btnSignup;
     TextView loginLink;
+
     
     @Override
 
@@ -31,6 +32,8 @@ public class SignupActivity extends AppCompatActivity {
         passwordText = (EditText)findViewById(R.id.input_password);
         btnSignup = (Button)findViewById(R.id.btn_signup);
         loginLink = (TextView)findViewById(R.id.link_login);
+        //TODO: there are now 3 places that have this hard coded, we need a global constant or something, maybe pop it in an sqlite table? - AB
+        tempXMPPConnection = new Authenticator(this,"tritium","45.35.4.171",5222);
 
                 btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override

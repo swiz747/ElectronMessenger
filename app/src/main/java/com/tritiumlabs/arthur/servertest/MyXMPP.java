@@ -15,7 +15,6 @@ import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.chat.Chat;
 import org.jivesoftware.smack.chat.ChatManager;
 import org.jivesoftware.smack.chat.ChatManagerListener;
 import org.jivesoftware.smack.chat.ChatMessageListener;
@@ -59,6 +58,15 @@ public class MyXMPP {
         this.port = port;
         this.loginUser = logiUser;
         this.passwordUser = passwordser;
+        this.context = context;
+        init();
+
+    }
+
+    public MyXMPP(MyService context, String domain, String host, int port) {
+        this.serverAddress = domain;
+        this.host = host;
+        this.port = port;
         this.context = context;
         init();
 
@@ -281,7 +289,7 @@ public class MyXMPP {
         Roster roster = Roster.getInstanceFor(connection);
         Collection<RosterEntry> entries = roster.getEntries();
         for (RosterEntry entry : entries) {
-            strFriends = strFriends + entry +",";
+            strFriends = strFriends + entry + ",";
         }
         strFriends = strFriends.substring(0,strFriends.length());
         return strFriends;

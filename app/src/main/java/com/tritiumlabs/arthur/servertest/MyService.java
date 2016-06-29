@@ -14,10 +14,12 @@ import org.jivesoftware.smack.chat.Chat;
  * Created by Arthur on 6/8/2016.
  */
 public class MyService extends Service {
-    //TODO: change this to application server -AB
+    //TODO: there are now 3 places that have this hard coded, we need a global constant or something, maybe pop it in an sqlite table? - AB
     private static final String DOMAIN = "tritium";
     private static final String HOST = "45.35.4.171";
     private static final int PORT = 5222;
+
+    //TODO: this will cause massive issues with the new authentication system so make sure to remove it after weve got something working
     private static final String USERNAME = "phoneapp";
     private static final String PASSWORD = "password";
     public static ConnectivityManager cm;
