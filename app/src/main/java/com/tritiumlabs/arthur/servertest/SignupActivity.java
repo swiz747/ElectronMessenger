@@ -90,7 +90,7 @@ import org.jivesoftware.smackx.iqregister.AccountManager;
         accountManager = AccountManager.getInstance(tempXMPPConnection.connection);
 
 
-        // TODO: Implement your own signup logic here.
+        // TODO: Move method to authenticator class for organization -AB
 
         new android.os.Handler().postDelayed(
                 new Runnable() {

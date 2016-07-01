@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.XMPPException;
+
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
@@ -34,6 +37,8 @@ public class LoginActivity extends AppCompatActivity {
         passwordText = (EditText)findViewById(R.id.input_password);
         btnLogin = (Button)findViewById(R.id.btn_login);
         signupLink = (TextView)findViewById(R.id.link_signup);
+
+        //TODO: add option to remain logged in/  or remember username and PW
 
         //TODO: this is for easy testing because im lazy -AB
         userName.setText("Dildo@gmail.com");
@@ -77,23 +82,29 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-        String email = userName.getText().toString();
-        String password = passwordText.getText().toString();
+        final String user = userName.getText().toString();
+        final String password = passwordText.getText().toString();
 
-        // TODO: Implement your own authentication logic here.
+        // TODO: move to authenticator class for oganization -AB
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
+                        tempXMPPConnection.setLoginCreds(user,password);
+
+                        if(!tempXMPPConnection.login())
+                        {
+                            onLoginFailed();
+                        }
                         // On complete call either onLoginSuccess or onLoginFailed
                         onLoginSuccess();
-                        // onLoginFailed();
+
                         progressDialog.dismiss();
                     }
                 }, 3000);
     }
 
-
+    //TODO: holy shit this code is really cool -AB
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
@@ -101,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 // TODO: Implement successful signup logic here
                 // By default we just finish the Activity and log them in automatically
-                this.finish();
+                //this.finish();
             }
         }
     }
@@ -113,6 +124,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginSuccess() {
+
+        //TODO: how the fuck do we pass the credentials
         btnLogin.setEnabled(true);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -130,8 +143,8 @@ public class LoginActivity extends AppCompatActivity {
         String email = userName.getText().toString();
         String password = passwordText.getText().toString();
 
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            userName.setError("enter a valid email address");
+        if (email.isEmpty() ) {
+            userName.setError("enter a valid username");
             valid = false;
         } else {
             userName.setError(null);

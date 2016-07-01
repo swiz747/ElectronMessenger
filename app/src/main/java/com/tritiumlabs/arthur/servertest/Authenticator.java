@@ -28,12 +28,14 @@ public class Authenticator {
     public static boolean isToasted = true;
     private String serverAddress;
     public static XMPPTCPConnection connection;
-    public static String loginUser;
+    public static String userName;
     public static String host;
     public static int port;
-    public static String passwordUser;
+    private static String password;
     Context context;
     public static Authenticator instance = null;
+
+
 
 
 
@@ -166,18 +168,28 @@ public class Authenticator {
         };
         connectionThread.execute();
     }
-
-    public void login()
+    public void setLoginCreds(String user, String pass)
     {
+        this.userName = user;
+        this.password = pass;
+    }
+
+    public boolean login()
+    {
+        boolean success = true;
 
         try {
-            connection.login(loginUser, passwordUser);
+            connection.login(userName, password);
             Log.i("LOGIN", "Yey! We're connected to the Xmpp server!");
 
         } catch (XMPPException | SmackException | IOException e) {
             e.printStackTrace();
+            success = false;
         } catch (Exception e) {
+            e.printStackTrace();
+            success = false;
         }
+        return success;
 
     }
     //TODO make this return an error or something upon fuckup
