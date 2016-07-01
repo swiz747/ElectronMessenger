@@ -20,8 +20,6 @@ public class MyService extends Service {
     private static final int PORT = 5222;
 
     //TODO: this will cause massive issues with the new authentication system so make sure to remove it after weve got something working
-    private static final String USERNAME = "phoneapp";
-    private static final String PASSWORD = "password";
     public static ConnectivityManager cm;
     public static MyXMPP xmpp;
     private final IBinder myBinder = new LocalBinder();
@@ -42,7 +40,7 @@ public class MyService extends Service {
         Log.d("Myservice", "Attempting to create service");
         super.onCreate();
         cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        xmpp = MyXMPP.getInstance(MyService.this, DOMAIN, HOST, PORT,  USERNAME, PASSWORD);
+        xmpp = MyXMPP.getInstance(MyService.this, DOMAIN, HOST, PORT);
         xmpp.connect("onCreate");
     }
 

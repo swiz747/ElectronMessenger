@@ -19,7 +19,7 @@ import org.jivesoftware.smack.XMPPException;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
-    public static Authenticator tempXMPPConnection;
+    public static MyXMPP xmppConnection;
     EditText userName;
     EditText passwordText;
     Button btnLogin;
@@ -41,10 +41,11 @@ public class LoginActivity extends AppCompatActivity {
         //TODO: add option to remain logged in/  or remember username and PW
 
         //TODO: this is for easy testing because im lazy -AB
-        userName.setText("Dildo@gmail.com");
-        passwordText.setText("fuck123");
+        userName.setText("phoneapp");
+        passwordText.setText("password");
         //TODO: there are now 3 places that have this hard coded, we need a global constant or something, maybe pop it in an sqlite table? - AB
-        tempXMPPConnection = new Authenticator(this,"tritium","45.35.4.171",5222);
+        xmppConnection = MyXMPP.getInstance(this,"tritium","45.35.4.171",5222);
+
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
 
@@ -70,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         Log.d(TAG, "Login");
 
         if (!validate()) {
-            onLoginFailed();
+            onLoginFailed("validation fail");
             return;
         }
 
@@ -84,17 +85,19 @@ public class LoginActivity extends AppCompatActivity {
 
         final String user = userName.getText().toString();
         final String password = passwordText.getText().toString();
+        xmppConnection.setLoginCreds(user, password);
 
         // TODO: move to authenticator class for oganization -AB
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
-                        tempXMPPConnection.setLoginCreds(user,password);
 
-                        if(!tempXMPPConnection.login())
+
+                        if(!xmppConnection.login())
                         {
-                            onLoginFailed();
+                            //this is throwing a flase negative, check Myxmpp class -AB
+                            onLoginFailed("xmpplogin returned false");
                         }
                         // On complete call either onLoginSuccess or onLoginFailed
                         onLoginSuccess();
@@ -131,8 +134,8 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+    public void onLoginFailed(String why) {
+        Toast.makeText(getBaseContext(), "Login failed:" + why, Toast.LENGTH_LONG).show();
 
         btnLogin.setEnabled(true);
     }

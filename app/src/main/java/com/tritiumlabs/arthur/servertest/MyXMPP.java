@@ -41,47 +41,45 @@ public class MyXMPP {
     private boolean chat_created = false;
     private String serverAddress;
     public static XMPPTCPConnection connection;
-    public static String loginUser;
+    private static String loginUser;
     public static String host;
     public static int port;
-    public static String passwordUser;
+    private static String passwordUser;
     Gson gson;
-    MyService context;
+    Context context;
     public static MyXMPP instance = null;
     public static boolean instanceCreated = false;
 
+    //TODO: NEVER USE THE CONSTRUCTOR FOR THIS CLASS USE THE GET INSTANCE METHOD -AB
 
-    public MyXMPP(MyService context, String domain, String host, int port, String logiUser,
-                  String passwordser) {
+    public MyXMPP(Context context, String domain, String host, int port) {
         this.serverAddress = domain;
         this.host = host;
         this.port = port;
-        this.loginUser = logiUser;
-        this.passwordUser = passwordser;
+
         this.context = context;
         init();
 
     }
 
-    public MyXMPP(MyService context, String domain, String host, int port) {
-        this.serverAddress = domain;
-        this.host = host;
-        this.port = port;
-        this.context = context;
-        init();
 
-    }
 
-    public static MyXMPP getInstance(MyService context, String server, String host, int port,
-                                     String user, String pass) {
+    public static MyXMPP getInstance(Context context, String server, String host, int port)
+    {
 
         if (instance == null) {
-            instance = new MyXMPP(context, server, host, port, user, pass);
+            instance = new MyXMPP(context, server, host, port);
             instanceCreated = true;
         }
         Log.d("xmpp", "inside get instance!");
         return instance;
 
+    }
+
+    public void setLoginCreds(String logiUser, String passwordser)
+    {
+        this.loginUser = logiUser;
+        this.passwordUser = passwordser;
     }
 
     public org.jivesoftware.smack.chat.Chat Mychat;
@@ -223,17 +221,23 @@ public class MyXMPP {
         };
         connectionThread.execute();
     }
-
-    public void login() {
-
+    // changed from void to boolean for login functionality -AB
+    public boolean login()
+    {
+        boolean isSuccessful = true;
         try {
             connection.login(loginUser, passwordUser);
             Log.i("LOGIN", "Yey! We're connected to the Xmpp server!");
 
         } catch (XMPPException | SmackException | IOException e) {
             e.printStackTrace();
+            Log.e("(" + "login()" + ")",
+                    "SMACKException: " + e.getMessage());
+            isSuccessful = false;
         } catch (Exception e) {
+            isSuccessful = false;
         }
+        return isSuccessful;
 
     }
 
