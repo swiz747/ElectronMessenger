@@ -286,14 +286,18 @@ public class MyXMPP {
 
     }
     //TODO: add documentation explaining why this is convoluted and retarded, sorry :( -AB
+    //TODO: this is where we can add status updates super easy -AB
     public String getRoster()
     {
         String strFriends= "";
 
+
         Roster roster = Roster.getInstanceFor(connection);
         Collection<RosterEntry> entries = roster.getEntries();
         for (RosterEntry entry : entries) {
-            strFriends = strFriends + entry + ",";
+            String i = entry.getUser();
+
+            strFriends = strFriends + i + ",";
         }
         strFriends = strFriends.substring(0,strFriends.length());
         return strFriends;

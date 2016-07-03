@@ -24,6 +24,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
         if (position == 0)
         {
             return new SomethingElse();
+
         }
         else if(position == 1)
         {
