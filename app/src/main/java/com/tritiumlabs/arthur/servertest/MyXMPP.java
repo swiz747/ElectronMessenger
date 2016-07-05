@@ -289,7 +289,7 @@ public class MyXMPP {
     //TODO: this is where we can add status updates super easy -AB
     public String getRoster()
     {
-        String strFriends= "";
+        String strFriends= "dildo,faggot";
 
 
         Roster roster = Roster.getInstanceFor(connection);

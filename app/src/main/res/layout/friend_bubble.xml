@@ -7,7 +7,8 @@
     <LinearLayout
         android:id="@+id/friend_bubble_layout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <ImageView
             android:layout_width="wrap_content"
@@ -18,7 +19,9 @@
         <RelativeLayout
             android:id="@+id/friend_info"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
+
             <TextView
                 android:id="@+id/friend_name"
                 android:layout_width="wrap_content"

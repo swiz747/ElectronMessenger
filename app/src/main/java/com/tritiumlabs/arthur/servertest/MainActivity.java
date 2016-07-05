@@ -6,18 +6,14 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import fragments.Chats;
 import fragments.FriendsList;
 
 
@@ -88,10 +84,10 @@ public class MainActivity extends AppCompatActivity
             mBounded = true;
             Log.d(TAG, "Connected the service");
 
-            //TODO this connects the friendslist fragment, probably
+            //TODO this connects the friendslist fragment, probably -AB
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
-            transaction.replace(R.id.container, new FriendsList()).commit();
+            transaction.replace(R.id.fragContainer, new FriendsList()).commit();
         }
 
         @Override
