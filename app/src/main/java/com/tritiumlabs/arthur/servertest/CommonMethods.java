@@ -11,6 +11,8 @@ import java.util.Date;
 public class CommonMethods {
     private static DateFormat dateFormat = new SimpleDateFormat("d MMM yyyy");
     private static DateFormat timeFormat = new SimpleDateFormat("K:mma");
+    private static DateFormat dateTimeFormat = new SimpleDateFormat("YYYY-MM-DD HH:MM:SS.SSS");
+
 
     public static String getCurrentTime() {
 
@@ -22,6 +24,12 @@ public class CommonMethods {
 
         Date today = Calendar.getInstance().getTime();
         return dateFormat.format(today);
+    }
+
+    public static String getCurrentDateTime() {
+
+        Date today = Calendar.getInstance().getTime();
+        return dateTimeFormat.format(today);
     }
 
 }

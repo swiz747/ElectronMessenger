@@ -258,14 +258,14 @@ public class MyXMPP {
 
         if (!chat_created) {
             Mychat = ChatManager.getInstanceFor(connection).createChat(
-                    chatMessage.receiver + "@"
+                    chatMessage.getReceiver() + "@"
                             + context.getString(R.string.server),
                     mMessageListener);
             chat_created = true;
         }
         final Message message = new Message();
+       // message.setThread(chatMessage.getChatID());
         message.setBody(body);
-        message.setStanzaId(chatMessage.msgid);
         message.setType(Message.Type.chat);
 
         try {
@@ -466,7 +466,7 @@ public class MyXMPP {
 
         private void processMessage(final ChatMessage chatMessage) {
 
-            chatMessage.isMine = false;
+            chatMessage.setIsMine(false);
             Chats.chatlist.add(chatMessage);
             new Handler(Looper.getMainLooper()).post(new Runnable() {
 

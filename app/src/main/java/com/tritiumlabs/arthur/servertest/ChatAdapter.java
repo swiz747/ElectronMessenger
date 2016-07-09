@@ -54,14 +54,14 @@ public class ChatAdapter extends BaseAdapter {
         }
 
         TextView msg = (TextView) vi.findViewById(R.id.message_text);
-        msg.setText(message.body);
+        msg.setText(message.getBody());
         LinearLayout layout = (LinearLayout) vi
                 .findViewById(R.id.bubble_layout);
         LinearLayout parent_layout = (LinearLayout) vi
                 .findViewById(R.id.bubble_layout_parent);
 
         // if message is mine then align to right
-        if (message.isMine) {
+        if (message.getIsMine()) {
             layout.setBackgroundResource(R.drawable.bubble2);
             parent_layout.setGravity(Gravity.RIGHT);
         }

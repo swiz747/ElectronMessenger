@@ -4,32 +4,93 @@ package com.tritiumlabs.arthur.servertest;
  * Created by Arthur on 6/7/2016.
  */
 
-import java.util.Random;
 
 public class ChatMessage {
 
-    public String body, sender, receiver, senderName;
-    public String Date, Time;
-    public String msgid;
-    public boolean isMine;// Did I send the message.
+    private String body, sender, receiver;
+    private String sentTime;
+    private String recvTime;
+    private int msgID;
+    private int chatID;
+    private boolean isMine;
 
-    public ChatMessage(String Sender, String Receiver, String messageString,
-                       String ID, boolean isMINE) {
-        body = messageString;
-        isMine = isMINE;
-        sender = Sender;
-        msgid = ID;
-        receiver = Receiver;
-        senderName = sender;
+    public ChatMessage(String Sender, String Receiver, String messageString, String sentTime, String recvTime) {
+        this.body = messageString;
+        this.sender = Sender;
+        this.receiver = Receiver;
+        this.sentTime = sentTime;
+        this.recvTime = recvTime;
     }
-    /**
-     * Probably shouldnt be a random integer due to possible conflicts
-     * -AB
-     * */
-    //TODO: probably something, just keep this in mind -AB
-    public void setMsgID() {
+    // be careful about these constructors, seriously like dont forget to manually set shit -AB
+    public ChatMessage() {
+        this.body = "";
+        this.sender = "";
+        this.receiver = "";
+        this.sentTime = "";
+        this.recvTime = "";
+    }
 
-        msgid += "-" + String.format("%02d", new Random().nextInt(100));
-        ;
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
+    }
+
+    public String getSentTime() {
+        return sentTime;
+    }
+
+    public void setSentTime(String sentTime) {
+        this.sentTime = sentTime;
+    }
+
+    public String getRecvTime() {
+        return recvTime;
+    }
+
+    public void setRecvTime(String recvTime) {
+        this.recvTime = recvTime;
+    }
+
+    public int getMsgID() {
+        return msgID;
+    }
+
+    public void setMsgID(int msgID) {
+        this.msgID = msgID;
+    }
+
+    public int getChatID() {
+        return chatID;
+    }
+
+    public void setChatID(int chatID) {
+        this.chatID = chatID;
+    }
+
+    public boolean getIsMine() {
+        return isMine;
+    }
+
+    public void setIsMine(boolean isMine) {
+        this.isMine = isMine;
     }
 }

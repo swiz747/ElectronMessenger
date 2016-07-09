@@ -21,7 +21,7 @@ import java.util.Random;
 public class Chats extends Fragment implements View.OnClickListener {
 
     private EditText msg_edittext;
-    private String user1 = "arthur", user2 = "swiz747";
+    private String user1 = "arthur", user2 = "";
     private Random random;
     public static ArrayList<ChatMessage> chatlist;
     public static ChatAdapter chatAdapter;
@@ -58,13 +58,14 @@ public class Chats extends Fragment implements View.OnClickListener {
     public void sendTextMessage(View v) {
         String message = msg_edittext.getEditableText().toString();
         if (!message.equalsIgnoreCase("")) {
-            final ChatMessage chatMessage = new ChatMessage(user1, user2,
-                    message, "" + random.nextInt(1000), true);
-            chatMessage.setMsgID();
-            chatMessage.body = message;
-            chatMessage.Date = CommonMethods.getCurrentDate();
-            chatMessage.Time = CommonMethods.getCurrentTime();
-            chatMessage.isMine = true;
+            final ChatMessage chatMessage = new ChatMessage();
+
+            chatMessage.setBody(message);
+            chatMessage.setSentTime(CommonMethods.getCurrentDateTime());
+            chatMessage.setChatID(1);
+            chatMessage.setSender(user1);
+            chatMessage.setReceiver(user2);
+            chatMessage.setIsMine(true);
 
             msg_edittext.setText("");
             chatAdapter.add(chatMessage);
@@ -72,6 +73,11 @@ public class Chats extends Fragment implements View.OnClickListener {
             MainActivity activity = ((MainActivity) getActivity());
             activity.getmService().xmpp.sendMessage(chatMessage);
         }
+    }
+
+    public void setUser2(String user2)
+    {
+        this.user2 = user2;
     }
 
     @Override
