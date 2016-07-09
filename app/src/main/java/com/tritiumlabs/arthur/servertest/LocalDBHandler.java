@@ -72,6 +72,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     //add new Message -AB
     public void addMessage(ChatMessage msg)
     {
+        Log.e("LocalDBHandler", "adding message to DB");
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_MSG_CHAT_ID, msg.getChatID());

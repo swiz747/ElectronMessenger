@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import fragments.Chats;
 import fragments.FriendsList;
 
 
@@ -85,9 +86,8 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "Connected the service");
 
             //TODO this connects the friendslist fragment, probably -AB
-            FragmentManager manager = getSupportFragmentManager();
-            FragmentTransaction transaction = manager.beginTransaction();
-            transaction.replace(R.id.fragContainer, new FriendsList()).commit();
+            openFriendslist();
+
         }
 
         @Override
@@ -97,6 +97,20 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "onServiceDisconnected");
         }
     };
+
+    public void openFriendslist()
+    {
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.fragContainer, new FriendsList()).commit();
+    }
+
+    public void openChat()
+    {
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.fragContainer, new Chats()).commit();
+    }
 
 
 }

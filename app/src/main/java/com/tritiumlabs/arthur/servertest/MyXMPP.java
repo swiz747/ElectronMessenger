@@ -49,6 +49,7 @@ public class MyXMPP {
     Context context;
     public static MyXMPP instance = null;
     public static boolean instanceCreated = false;
+    public static LocalDBHandler dbHandler;
 
     //TODO: NEVER USE THE CONSTRUCTOR FOR THIS CLASS USE THE GET INSTANCE METHOD -AB
 
@@ -69,6 +70,8 @@ public class MyXMPP {
 
         if (instance == null) {
             instance = new MyXMPP(context, server, host, port);
+            //stapled the DB onto the xmpp service im not sure if this was a good idea or not -AB
+            dbHandler = new LocalDBHandler(context);
             instanceCreated = true;
         }
         Log.d("xmpp", "inside get instance!");
@@ -457,16 +460,21 @@ public class MyXMPP {
             if (message.getType() == Message.Type.chat
                     && message.getBody() != null)
             {
+                //TODO if this actually works then Gson library is straight up fucking magic -AB
                 final ChatMessage chatMessage = gson.fromJson(
                         message.getBody(), ChatMessage.class);
 
                 processMessage(chatMessage);
             }
+            //add elseifs for different types of chats
         }
 
         private void processMessage(final ChatMessage chatMessage) {
 
             chatMessage.setIsMine(false);
+
+            //holy shit i hope this works -AB
+            dbHandler.addMessage(chatMessage);
             Chats.chatlist.add(chatMessage);
             new Handler(Looper.getMainLooper()).post(new Runnable() {
 

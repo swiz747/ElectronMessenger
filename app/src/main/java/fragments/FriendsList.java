@@ -3,6 +3,8 @@ package fragments;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tritiumlabs.arthur.servertest.FriendslistAdapter;
+import com.tritiumlabs.arthur.servertest.MainActivity;
 import com.tritiumlabs.arthur.servertest.MyService;
 import com.tritiumlabs.arthur.servertest.R;
 
@@ -46,8 +49,19 @@ public class FriendsList extends Fragment {
                 TextView friendView  = (TextView)view.findViewById(R.id.friend_name);
                 String friend = friendView.getText().toString();
 
-                Log.d("item click:",position+" " + id +" item:" + friend.toString());
+                Log.d("item click:",position+" " + id +" item:" + friend);
                 //TODO Create chat fragment here pass in unique chat ID -AB
+                //MainActivity activity = ((MainActivity) getActivity());
+                //activity.openChat();
+                Bundle args = new Bundle();
+                args.putString("test", friend);
+                Fragment toFragment = new Chats();
+                toFragment.setArguments(args);
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragContainer, toFragment, "where is this")
+                        .addToBackStack("where is this").commit();
+
 
 
 
