@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,7 @@ public class FriendsList extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.friendslist_layout, container, false);
         lstView_Friends = (ListView) view.findViewById(R.id.lstView_Friends);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Friend List");
 
 
         // ----Set autoscroll of listview when a new message arrives----//
@@ -54,7 +56,9 @@ public class FriendsList extends Fragment {
                 //MainActivity activity = ((MainActivity) getActivity());
                 //activity.openChat();
                 Bundle args = new Bundle();
-                args.putString("test", friend);
+                friend = friend.substring(0, friend.indexOf("@"));
+                args.putString("friendName", friend);
+                args.putString("friendID", friend);
                 Fragment toFragment = new Chats();
                 toFragment.setArguments(args);
                 getFragmentManager()
@@ -84,8 +88,9 @@ public class FriendsList extends Fragment {
 
         });
 
-
+        Log.d("Friendslist","about to get roster");
         friendString = MyService.xmpp.getRoster();
+        Log.d("Friendslist","got roster: " + friendString);
         friendslistAdapter = new FriendslistAdapter(getActivity(), friendString);
         lstView_Friends.setAdapter(friendslistAdapter);
         friendslistAdapter.notifyDataSetChanged();

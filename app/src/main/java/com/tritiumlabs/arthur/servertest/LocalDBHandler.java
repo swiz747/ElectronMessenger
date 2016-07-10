@@ -14,7 +14,7 @@ import java.util.List;
 public class LocalDBHandler extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     // Database Name
     //TODO: Change Name to be relevant -AB
     private static final String DATABASE_NAME = "RoundAbout";
@@ -47,7 +47,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         //create message table
         String CREATE_MESSAGES_TABLE = "CREATE TABLE " + TABLE_MESSAGES + "("
                 + KEY_MSG_ID + " INTEGER PRIMARY KEY," + KEY_MSG_CHAT_ID + " INTEGER,"
-                + KEY_MSG_SENDER + " VARCHAR," + KEY_MSG_BODY + " TEXT,"
+                + KEY_MSG_SENDER + " VARCHAR," + KEY_MSG_RECIEVER + " VARCHAR," + KEY_MSG_BODY + " TEXT,"
                 + KEY_MSG_SENTTIME + " DATETIME,"+ KEY_MSG_RECVTIME + " DATETIME"+ ")";
 
         //create setting table

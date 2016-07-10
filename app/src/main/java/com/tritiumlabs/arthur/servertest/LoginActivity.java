@@ -89,22 +89,24 @@ public class LoginActivity extends AppCompatActivity {
 
         // TODO: move to authenticator class for oganization -AB
 
-        new android.os.Handler().postDelayed(
+        new android.os.Handler().post(
                 new Runnable() {
                     public void run() {
 
+                        boolean dicjs = true;
 
-                        if(!xmppConnection.login())
+
+                        //holy shit we need to revisit this this will hang forever if you fuck up
+                        xmppConnection.connect("Login");
+                        while(!xmppConnection.loggedin)
                         {
-                            //this is throwing a flase negative, check Myxmpp class -AB
-                            onLoginFailed("xmpplogin returned false");
+
                         }
-                        // On complete call either onLoginSuccess or onLoginFailed
                         onLoginSuccess();
 
                         progressDialog.dismiss();
                     }
-                }, 3000);
+                });
     }
 
     //TODO: holy shit this code is really cool -AB

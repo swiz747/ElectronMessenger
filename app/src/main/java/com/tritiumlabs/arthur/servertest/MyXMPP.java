@@ -228,6 +228,7 @@ public class MyXMPP {
     public boolean login()
     {
         boolean isSuccessful = true;
+        String derp = "";
         try {
             connection.login(loginUser, passwordUser);
             Log.i("LOGIN", "Yey! We're connected to the Xmpp server!");
@@ -236,10 +237,15 @@ public class MyXMPP {
             e.printStackTrace();
             Log.e("(" + "login()" + ")",
                     "SMACKException: " + e.getMessage());
+
             isSuccessful = false;
+            derp = "became false in main catch";
         } catch (Exception e) {
             isSuccessful = false;
+            derp = "became false in second catch";
         }
+
+        Log.e("(" + "login()" + "):" ,"success =" + derp);
         return isSuccessful;
 
     }
@@ -292,8 +298,8 @@ public class MyXMPP {
     //TODO: this is where we can add status updates super easy -AB
     public String getRoster()
     {
-        String strFriends= "dildo,faggot";
-
+        String strFriends= "dildo@tritium,";
+        Log.d("GET ROSTER: ", strFriends);
 
         Roster roster = Roster.getInstanceFor(connection);
         Collection<RosterEntry> entries = roster.getEntries();
@@ -406,13 +412,13 @@ public class MyXMPP {
             connected = true;
 
             chat_created = false;
-            loggedin = false;
+            loggedin = true;
         }
 
         @Override
         public void authenticated(XMPPConnection arg0, boolean arg1) {
             Log.d("xmpp", "Authenticated!");
-            loggedin = true;
+
 
             ChatManager.getInstanceFor(connection).addChatListener(
                     mChatManagerListener);
@@ -444,6 +450,7 @@ public class MyXMPP {
 
                     }
                 });
+            loggedin = true;
         }
     }
 

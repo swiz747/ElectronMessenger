@@ -19,7 +19,6 @@ public class MyService extends Service {
     private static final String HOST = "45.35.4.171";
     private static final int PORT = 5222;
 
-    //TODO: this will cause massive issues with the new authentication system so make sure to remove it after weve got something working
     public static ConnectivityManager cm;
     public static MyXMPP xmpp;
     private final IBinder myBinder = new LocalBinder();
@@ -41,7 +40,7 @@ public class MyService extends Service {
         super.onCreate();
         cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         xmpp = MyXMPP.getInstance(MyService.this, DOMAIN, HOST, PORT);
-        xmpp.connect("onCreate");
+        //xmpp.connect("onCreate");
     }
 
     @Override

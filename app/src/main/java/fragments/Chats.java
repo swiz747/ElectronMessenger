@@ -20,11 +20,10 @@ import com.tritiumlabs.arthur.servertest.R;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Chats extends Fragment implements View.OnClickListener {
+public class Chats extends Fragment {
 
     private EditText msg_edittext;
     private String user1 = "arthur", user2 = "";
-    private Random random;
     public static ArrayList<ChatMessage> chatlist;
     public static ChatAdapter chatAdapter;
     ListView msgListView;
@@ -33,17 +32,29 @@ public class Chats extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.chat_layout, container, false);
-        //TODO: fix this deprecation -AB
+
         Bundle args = getArguments();
-        setUser2(args.getString("test"));
+        setUser2(args.getString("friendName"));
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(user2);
 
 
         msg_edittext = (EditText) view.findViewById(R.id.messageEditText);
         msgListView = (ListView) view.findViewById(R.id.msgListView);
-        ImageButton sendButton = (ImageButton) view
+        final ImageButton sendButton = (ImageButton) view
                 .findViewById(R.id.sendMessageButton);
-        sendButton.setOnClickListener(this);
+
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                //sendButton.setImageResource(R.drawable.send_selected);
+                sendTextMessage(v);
+
+
+
+            }
+        });
 
         // ----Set autoscroll of listview when a new message arrives----//
         msgListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
@@ -66,7 +77,7 @@ public class Chats extends Fragment implements View.OnClickListener {
             final ChatMessage chatMessage = new ChatMessage();
 
             chatMessage.setBody(message);
-            chatMessage.setSentTime(CommonMethods.getCurrentDateTime());
+            //chatMessage.setSentTime(CommonMethods.getCurrentDateTime());
             chatMessage.setChatID(1);
             chatMessage.setSender(user1);
             chatMessage.setReceiver(user2);
@@ -85,16 +96,6 @@ public class Chats extends Fragment implements View.OnClickListener {
         this.user2 = user2;
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.sendMessageButton:
-            {
 
-                sendTextMessage(v);
-            }
-
-        }
-    }
 
 }
