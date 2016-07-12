@@ -65,13 +65,14 @@ public class MyXMPP {
 
 
 
-    public static MyXMPP getInstance(Context context, String server, String host, int port)
+    public static MyXMPP getInstance(Context context)
     {
 
         if (instance == null) {
-            instance = new MyXMPP(context, server, host, port);
             //stapled the DB onto the xmpp service im not sure if this was a good idea or not -AB
-            dbHandler = new LocalDBHandler(context);
+            dbHandler = dbHandler.getInstance(context);
+            instance = new MyXMPP(context, dbHandler.getDomain(), dbHandler.getHost(), dbHandler.getPort());
+
             instanceCreated = true;
         }
         Log.d("xmpp", "inside get instance!");
@@ -265,6 +266,7 @@ public class MyXMPP {
     public void sendMessage(ChatMessage chatMessage) {
         String body = gson.toJson(chatMessage);
 
+
         if (!chat_created) {
             Mychat = ChatManager.getInstanceFor(connection).createChat(
                     chatMessage.getReceiver() + "@"
@@ -281,6 +283,7 @@ public class MyXMPP {
             if (connection.isAuthenticated()) {
 
                 Mychat.sendMessage(message);
+                dbHandler.addMessage(chatMessage);
 
             } else {
 

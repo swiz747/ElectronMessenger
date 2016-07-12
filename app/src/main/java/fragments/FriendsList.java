@@ -58,7 +58,7 @@ public class FriendsList extends Fragment {
                 Bundle args = new Bundle();
                 friend = friend.substring(0, friend.indexOf("@"));
                 args.putString("friendName", friend);
-                args.putString("friendID", friend);
+                //args.putString("friendID", friend);
                 Fragment toFragment = new Chats();
                 toFragment.setArguments(args);
                 getFragmentManager()

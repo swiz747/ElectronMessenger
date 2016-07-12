@@ -14,6 +14,7 @@ import android.widget.ListView;
 import com.tritiumlabs.arthur.servertest.ChatAdapter;
 import com.tritiumlabs.arthur.servertest.ChatMessage;
 import com.tritiumlabs.arthur.servertest.CommonMethods;
+import com.tritiumlabs.arthur.servertest.LocalDBHandler;
 import com.tritiumlabs.arthur.servertest.MainActivity;
 import com.tritiumlabs.arthur.servertest.R;
 
@@ -24,14 +25,18 @@ public class Chats extends Fragment {
 
     private EditText msg_edittext;
     private String user1 = "arthur", user2 = "";
+    private int chatID;
     public static ArrayList<ChatMessage> chatlist;
     public static ChatAdapter chatAdapter;
     ListView msgListView;
+    static LocalDBHandler dbHandler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.chat_layout, container, false);
+        dbHandler = dbHandler.getInstance(getContext());
+
 
         Bundle args = getArguments();
         setUser2(args.getString("friendName"));
@@ -61,6 +66,7 @@ public class Chats extends Fragment {
         msgListView.setStackFromBottom(true);
 
         chatlist = new ArrayList<ChatMessage>();
+        chatlist = dbHandler.getChatMessages(user2);
         chatAdapter = new ChatAdapter(getActivity(), chatlist);
         msgListView.setAdapter(chatAdapter);
 
@@ -94,6 +100,10 @@ public class Chats extends Fragment {
     public void setUser2(String user2)
     {
         this.user2 = user2;
+    }
+    public void setChatID(int chatID)
+    {
+        this.chatID = chatID;
     }
 
 

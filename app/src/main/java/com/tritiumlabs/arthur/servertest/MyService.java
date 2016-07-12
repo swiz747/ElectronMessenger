@@ -39,7 +39,7 @@ public class MyService extends Service {
         Log.d("Myservice", "Attempting to create service");
         super.onCreate();
         cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        xmpp = MyXMPP.getInstance(MyService.this, DOMAIN, HOST, PORT);
+        xmpp = MyXMPP.getInstance(MyService.this);
         //xmpp.connect("onCreate");
     }
 

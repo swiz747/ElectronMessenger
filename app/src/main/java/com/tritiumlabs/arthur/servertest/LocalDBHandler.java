@@ -14,13 +14,16 @@ import java.util.List;
 public class LocalDBHandler extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 4;
+    // Database instance
+    private static LocalDBHandler instance = null;
     // Database Name
     //TODO: Change Name to be relevant -AB
     private static final String DATABASE_NAME = "RoundAbout";
     //  table names
     private static final String TABLE_MESSAGES = "messages";
     private static final String TABLE_SETTINGS = "settings";
+
     // messages table columns
     private static final String KEY_MSG_ID = "messages_id";
     private static final String KEY_MSG_CHAT_ID = "messages_chat_id";
@@ -29,18 +32,36 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     private static final String KEY_MSG_BODY = "messages_body";
     private static final String KEY_MSG_SENTTIME = "messages_sent";
     private static final String KEY_MSG_RECVTIME = "messages_recv";
+    private static final String KEY_MSG_CREATETIME = "messages_created";
     // settings table columns
     private static final String KEY_SET_ID = "settings_id";
-    private static final String KEY_SET_layout = "settings_layout";
+    private static final String KEY_SET_LAYOUT = "settings_layout";
+    private static final String KEY_SET_SERVER = "settings_server";
+    private static final String KEY_SET_PORT = "settings_port";
+    private static final String KEY_SET_DOMAIN = "settings_domain";
+    private static final String KEY_SET_USERNAME = "settings_username";
+    private static final String KEY_SET_PASSWORD = "settings_password";
 
 
 
 
 
+    public static synchronized LocalDBHandler getInstance(Context context) {
+
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+        // See this article for more information: http://bit.ly/6LRzfx
+        if (instance == null) {
+            instance = new LocalDBHandler(context.getApplicationContext());
+        }
+        return instance;
+    }
 
     public LocalDBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
+
     @Override
     public void onCreate(SQLiteDatabase db)
     {
@@ -48,15 +69,35 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         String CREATE_MESSAGES_TABLE = "CREATE TABLE " + TABLE_MESSAGES + "("
                 + KEY_MSG_ID + " INTEGER PRIMARY KEY," + KEY_MSG_CHAT_ID + " INTEGER,"
                 + KEY_MSG_SENDER + " VARCHAR," + KEY_MSG_RECIEVER + " VARCHAR," + KEY_MSG_BODY + " TEXT,"
-                + KEY_MSG_SENTTIME + " DATETIME,"+ KEY_MSG_RECVTIME + " DATETIME"+ ")";
+                + KEY_MSG_SENTTIME + " DATETIME,"+ KEY_MSG_RECVTIME + " DATETIME"+ KEY_MSG_CREATETIME + " DATETIME"+")";
 
+        //TODO: ONLY UPDATES ON THIS TABLE YOU FUCKS -AB
         //create setting table
-        /**String CREATE_SETTINGS_TABLE = "CREATE TABLE " + TABLE_SETTINGS + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-                + KEY_SH_ADDR + " TEXT" + ")";
-         */
+        String CREATE_SETTINGS_TABLE = "CREATE TABLE " + TABLE_SETTINGS + "("
+                + KEY_SET_ID + " INTEGER PRIMARY KEY," + KEY_SET_DOMAIN + " VARCHAR,"
+                + KEY_SET_PORT + " INTEGER," + KEY_SET_SERVER + " VARCHAR,"
+                + KEY_SET_USERNAME + " VARCHAR," + KEY_SET_PASSWORD + " VARCHAR" + ")";
+
+
+
+
+        //create Friends List
+
+
         db.execSQL(CREATE_MESSAGES_TABLE);
-        //db.execSQL(CREATE_SETTINGS_TABLE);
+        db.execSQL(CREATE_SETTINGS_TABLE);
+
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_SET_DOMAIN,"tritium");
+        values.put(KEY_SET_PORT, 5222);
+        values.put(KEY_SET_SERVER, "45.35.4.171");
+        values.put(KEY_SET_USERNAME, "");
+        values.put(KEY_SET_PASSWORD, "");
+
+        // Inserting Row
+        db.insert(TABLE_SETTINGS, null, values);
+        //db.close(); // Closing database connection
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
@@ -84,7 +125,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
 
         // Inserting Row
         db.insert(TABLE_MESSAGES, null, values);
-        db.close(); // Closing database connection
+        //db.close(); // Closing database connection
     }
     // TODO: should we have deletable messages? -AB
     public void deleteMessage(ChatMessage msg)
@@ -94,9 +135,9 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
-    public  List<ChatMessage> getChatMessages(long chat_id) {
+    public  ArrayList<ChatMessage> getChatMessages(long chat_id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        List<ChatMessage> messages = new ArrayList<ChatMessage>();
+        ArrayList<ChatMessage> messages = new ArrayList<ChatMessage>();
 
         String selectQuery = "SELECT * FROM " + TABLE_MESSAGES + " WHERE "
                 + KEY_MSG_CHAT_ID + " = " + chat_id;
@@ -116,6 +157,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
                     msg.setBody((c.getString(c.getColumnIndex(KEY_MSG_BODY))));
                     msg.setSentTime(c.getString(c.getColumnIndex(KEY_MSG_SENTTIME)));
                     msg.setRecvTime(c.getString(c.getColumnIndex(KEY_MSG_RECVTIME)));
+                    msg.setCreateTime(c.getString(c.getColumnIndex(KEY_MSG_CREATETIME)));
 
                     // adding to ChatMessage ArrayList -AB
                     messages.add(msg);
@@ -127,6 +169,72 @@ public class LocalDBHandler extends SQLiteOpenHelper {
 
         return messages;
     }
+
+    public void testSomeShit()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+    }
+
+    public  ArrayList<ChatMessage> getChatMessages(String friend) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<ChatMessage> messages = new ArrayList<ChatMessage>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_MESSAGES + " WHERE "
+                + KEY_MSG_SENDER + " = '" + friend + "' AND " + KEY_MSG_RECIEVER + " = '" + friend + "'";
+
+        Log.e("LocalDBHandler", selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c != null)
+        {
+            // looping through all rows and adding to list
+            if (c.moveToFirst()) {
+                do {
+                    ChatMessage msg = new ChatMessage();
+                    msg.setMsgID(c.getInt((c.getColumnIndex(KEY_MSG_ID))));
+                    msg.setChatID(c.getInt((c.getColumnIndex(KEY_MSG_CHAT_ID))));
+                    msg.setBody((c.getString(c.getColumnIndex(KEY_MSG_BODY))));
+                    msg.setSentTime(c.getString(c.getColumnIndex(KEY_MSG_SENTTIME)));
+                    msg.setRecvTime(c.getString(c.getColumnIndex(KEY_MSG_RECVTIME)));
+                    msg.setCreateTime(c.getString(c.getColumnIndex(KEY_MSG_CREATETIME)));
+
+                    // adding to ChatMessage ArrayList -AB
+                    messages.add(msg);
+                } while (c.moveToNext());
+            }
+        }
+
+
+
+        return messages;
+    }
+
+    //TODO make these function, nigger -AB
+    public String getDomain()
+    {
+        return "tritium";
+    }
+    public String getHost()
+    {
+        return "45.35.4.171";
+    }
+    public int getPort()
+    {
+        return 5222;
+    }
+    public String getUsername()
+    {
+        return "phoneapp";
+    }
+    public String getPassword()
+    {
+        return "password";
+    }
+
+
+
+
 
 
 

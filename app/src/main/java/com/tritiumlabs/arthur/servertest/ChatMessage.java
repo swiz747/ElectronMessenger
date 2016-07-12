@@ -10,16 +10,18 @@ public class ChatMessage {
     private String body, sender, receiver;
     private String sentTime;
     private String recvTime;
+    private String createTime;
     private int msgID;
     private int chatID;
     private boolean isMine;
 
-    public ChatMessage(String Sender, String Receiver, String messageString, String sentTime, String recvTime) {
+    public ChatMessage(String Sender, String Receiver, String messageString, String sentTime, String recvTime, String createTime) {
         this.body = messageString;
         this.sender = Sender;
         this.receiver = Receiver;
         this.sentTime = sentTime;
         this.recvTime = recvTime;
+        this.createTime = createTime;
     }
     // be careful about these constructors, seriously like dont forget to manually set shit -AB
     public ChatMessage() {
@@ -28,6 +30,7 @@ public class ChatMessage {
         this.receiver = "";
         this.sentTime = "";
         this.recvTime = "";
+        this.createTime = "";
     }
 
     public String getBody() {
@@ -92,5 +95,13 @@ public class ChatMessage {
 
     public void setIsMine(boolean isMine) {
         this.isMine = isMine;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }

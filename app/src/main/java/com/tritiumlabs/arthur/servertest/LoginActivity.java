@@ -43,8 +43,8 @@ public class LoginActivity extends AppCompatActivity {
         //TODO: this is for easy testing because im lazy -AB
         userName.setText("phoneapp");
         passwordText.setText("password");
-        //TODO: there are now 3 places that have this hard coded, we need a global constant or something, maybe pop it in an sqlite table? - AB
-        xmppConnection = MyXMPP.getInstance(this,"tritium","45.35.4.171",5222);
+
+        xmppConnection = MyXMPP.getInstance(this);
 
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +79,7 @@ public class LoginActivity extends AppCompatActivity {
 
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
                 R.style.AppTheme_Dark_Dialog);
+        //TODO: why the fuck is this not working??!?!?!?!? jesus fucking christ -AB
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
@@ -93,16 +94,32 @@ public class LoginActivity extends AppCompatActivity {
                 new Runnable() {
                     public void run() {
 
-                        boolean dicjs = true;
-
-
-                        //holy shit we need to revisit this this will hang forever if you fuck up
                         xmppConnection.connect("Login");
+                        //holy shit we need to revisit this this will hang forever if you fuck up
+                        long startTime = System.currentTimeMillis(); //fetch starting time
+                        boolean success = false;
                         while(!xmppConnection.loggedin)
                         {
-
+                            if(!((System.currentTimeMillis()-startTime)<10000))
+                            {
+                                success = false;
+                                break;
+                            }
+                            else
+                            {
+                                success = true;
+                            }
                         }
-                        onLoginSuccess();
+
+                        if (success)
+                        {
+                            onLoginSuccess();
+                        }
+                        else
+                        {
+                            onLoginFailed("timeout");
+                        }
+
 
                         progressDialog.dismiss();
                     }
@@ -130,8 +147,9 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
 
-        //TODO: how the fuck do we pass the credentials
+
         btnLogin.setEnabled(true);
+        //TODO add username and password to DB -AB
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
