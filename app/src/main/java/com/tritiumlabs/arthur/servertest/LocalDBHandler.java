@@ -96,8 +96,10 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         values.put(KEY_SET_PASSWORD, "");
 
         // Inserting Row
-        db.insert(TABLE_SETTINGS, null, values);
-        //db.close(); // Closing database connection
+        long wat = db.insert(TABLE_SETTINGS, null, values);
+        Log.d("FUCKING LOOK AT ME", String.valueOf(wat));
+
+
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
@@ -235,6 +237,23 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     }
 
     //TODO make these function, nigger -AB
+    //setters
+    public int setUserName(String username)
+    {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_SET_USERNAME, username);
+// updating row
+        return db.update(TABLE_SETTINGS, values, null, null);
+
+    }
+    public void setUserPassword(String username)
+    {
+
+    }
+
+    //getters
     public String getDomain()
     {
         return "tritium";
@@ -249,7 +268,48 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     }
     public String getUsername()
     {
-        return "phoneapp";
+        String returnValue = "fucking nothing";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_SETTINGS + " WHERE "
+            + KEY_SET_ID + " = " + 1;
+
+        Log.e("LocalDBHandler", selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c != null) {
+            // looping through all rows and adding to list
+            if (c.moveToFirst()) {
+                returnValue = c.getString(c.getColumnIndex(KEY_SET_USERNAME));
+            }
+        }
+
+
+        Log.d("look at me motherfucker", returnValue);
+        return returnValue;
+    }
+    public String getLocalSettings()
+    {
+        String returnValue = "fucking nothing";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_SETTINGS;
+
+        Log.e("LocalDBHandler", selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c != null) {
+            // looping through all rows and adding to list
+            if (c.moveToFirst()) {
+                returnValue = c.getString(c.getColumnIndex(KEY_SET_USERNAME));
+            }
+        }
+
+
+        Log.d("look at me motherfucker", returnValue);
+        return returnValue;
     }
     public String getPassword()
     {
@@ -262,8 +322,10 @@ public class LocalDBHandler extends SQLiteOpenHelper {
 
         String deleteAll = "DELETE FROM " + TABLE_MESSAGES;
         db.execSQL(deleteAll);
-        db.delete(TABLE_SETTINGS, null,null);
-
+        String deleteAll2 = "DELETE FROM " + TABLE_SETTINGS;
+        db.execSQL(deleteAll2);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MESSAGES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SETTINGS);
         db.close();
 
     }

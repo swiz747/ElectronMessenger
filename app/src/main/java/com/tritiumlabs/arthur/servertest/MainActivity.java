@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        LocalDBHandler handler = LocalDBHandler.getInstance(this);
+        handler.close();
 
     }
 
@@ -60,6 +62,10 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+
+
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -69,6 +75,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            LocalDBHandler handler = LocalDBHandler.getInstance(this);
+            handler.getLocalSettings();
             return true;
         }
         else if (id == R.id.fuck_everything)
@@ -83,6 +91,11 @@ public class MainActivity extends AppCompatActivity
             //TODO temporary add friend
             openFriendAdd();
             return true;
+        }
+        else if (id == R.id.add_friend)
+        {
+            //TODO temporary add friend
+
         }
 
         return super.onOptionsItemSelected(item);

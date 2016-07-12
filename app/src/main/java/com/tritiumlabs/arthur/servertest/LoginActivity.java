@@ -113,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         if (success)
                         {
-                            onLoginSuccess();
+                            onLoginSuccess(user, password);
                         }
                         else
                         {
@@ -145,11 +145,13 @@ public class LoginActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    public void onLoginSuccess() {
+    public void onLoginSuccess(String user, String password) {
 
 
         btnLogin.setEnabled(true);
         //TODO add username and password to DB -AB
+        xmppConnection.dbHandler.setUserName(user);
+        xmppConnection.dbHandler.setUserPassword(password);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
