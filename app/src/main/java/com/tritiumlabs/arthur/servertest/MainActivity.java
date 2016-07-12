@@ -75,15 +75,15 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            LocalDBHandler handler = LocalDBHandler.getInstance(this);
-            handler.getLocalSettings();
+           // LocalDBHandler handler = LocalDBHandler.getInstance(this);
+            //handler.getLocalSettings();
             return true;
         }
         else if (id == R.id.fuck_everything)
         {
             //TODO for when you need to fuck everyhting -AB
-            LocalDBHandler handler = LocalDBHandler.getInstance(this);
-            handler.fuckeverything();
+            //LocalDBHandler handler = LocalDBHandler.getInstance(this);
+            //handler.fuckeverything();
             return true;
         }
         else if (id == R.id.add_friend)
