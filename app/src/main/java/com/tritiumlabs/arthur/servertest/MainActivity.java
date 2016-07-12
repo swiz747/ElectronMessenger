@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import fragments.Chats;
+import fragments.FriendAdd;
 import fragments.FriendsList;
 
 
@@ -70,6 +71,19 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
+        else if (id == R.id.fuck_everything)
+        {
+            //TODO for when you need to fuck everyhting -AB
+            LocalDBHandler handler = LocalDBHandler.getInstance(this);
+            handler.fuckeverything();
+            return true;
+        }
+        else if (id == R.id.add_friend)
+        {
+            //TODO temporary add friend
+            openFriendAdd();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -110,6 +124,12 @@ public class MainActivity extends AppCompatActivity
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.fragContainer, new Chats()).commit();
+    }
+    public void openFriendAdd()
+    {
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.fragContainer, new FriendAdd()).addToBackStack("stillnotsure").commit();
     }
 
 

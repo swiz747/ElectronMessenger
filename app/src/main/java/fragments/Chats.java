@@ -24,7 +24,7 @@ import java.util.Random;
 public class Chats extends Fragment {
 
     private EditText msg_edittext;
-    private String user1 = "arthur", user2 = "";
+    private String user1 = "",user2 = "";
     private int chatID;
     public static ArrayList<ChatMessage> chatlist;
     public static ChatAdapter chatAdapter;
@@ -39,6 +39,7 @@ public class Chats extends Fragment {
 
 
         Bundle args = getArguments();
+        setUser1(dbHandler.getUsername());
         setUser2(args.getString("friendName"));
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(user2);
 
@@ -69,6 +70,7 @@ public class Chats extends Fragment {
         chatlist = dbHandler.getChatMessages(user2);
         chatAdapter = new ChatAdapter(getActivity(), chatlist);
         msgListView.setAdapter(chatAdapter);
+        //dbHandler.fuckeverything();
 
         return view;
     }
@@ -96,7 +98,10 @@ public class Chats extends Fragment {
             activity.getmService().xmpp.sendMessage(chatMessage);
         }
     }
-
+    public void setUser1(String user1)
+    {
+        this.user1 = user1;
+    }
     public void setUser2(String user2)
     {
         this.user2 = user2;

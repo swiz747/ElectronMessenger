@@ -14,7 +14,7 @@ import java.util.List;
 public class LocalDBHandler extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 1;
     // Database instance
     private static LocalDBHandler instance = null;
     // Database Name
@@ -110,6 +110,16 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion)
+    {
+        //TODO: i dont know if i like this, if we ever upgrade we will wipe all user data -AB
+        // Drop older table if existed
+        db.execSQL("DROP TABLE IF EXISTS '" + TABLE_MESSAGES +"'");
+        db.execSQL("DROP TABLE IF EXISTS '" + TABLE_SETTINGS + "'");
+        // Creating tables again
+        onCreate(db);
+    }
     //add new Message -AB
     public void addMessage(ChatMessage msg)
     {
@@ -132,7 +142,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_MESSAGES + " WHERE " + KEY_MSG_ID + " = " + msg.getMsgID());
-        db.close(); // Closing database connection
+         // Closing database connection
     }
 
     public  ArrayList<ChatMessage> getChatMessages(long chat_id) {
@@ -155,6 +165,8 @@ public class LocalDBHandler extends SQLiteOpenHelper {
                     msg.setMsgID(c.getInt((c.getColumnIndex(KEY_MSG_ID))));
                     msg.setChatID(c.getInt((c.getColumnIndex(KEY_MSG_CHAT_ID))));
                     msg.setBody((c.getString(c.getColumnIndex(KEY_MSG_BODY))));
+                    msg.setSender((c.getString(c.getColumnIndex(KEY_MSG_SENDER))));
+                    msg.setReceiver((c.getString(c.getColumnIndex(KEY_MSG_RECIEVER))));
                     msg.setSentTime(c.getString(c.getColumnIndex(KEY_MSG_SENTTIME)));
                     msg.setRecvTime(c.getString(c.getColumnIndex(KEY_MSG_RECVTIME)));
                     msg.setCreateTime(c.getString(c.getColumnIndex(KEY_MSG_CREATETIME)));
@@ -170,17 +182,13 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         return messages;
     }
 
-    public void testSomeShit()
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-    }
 
     public  ArrayList<ChatMessage> getChatMessages(String friend) {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<ChatMessage> messages = new ArrayList<ChatMessage>();
 
         String selectQuery = "SELECT * FROM " + TABLE_MESSAGES + " WHERE "
-                + KEY_MSG_SENDER + " = '" + friend + "' AND " + KEY_MSG_RECIEVER + " = '" + friend + "'";
+                + KEY_MSG_SENDER + " = '" + friend + "' OR " + KEY_MSG_RECIEVER + " = '" + friend + "'";
 
         Log.e("LocalDBHandler", selectQuery);
 
@@ -194,10 +202,26 @@ public class LocalDBHandler extends SQLiteOpenHelper {
                     ChatMessage msg = new ChatMessage();
                     msg.setMsgID(c.getInt((c.getColumnIndex(KEY_MSG_ID))));
                     msg.setChatID(c.getInt((c.getColumnIndex(KEY_MSG_CHAT_ID))));
+                    msg.setSender((c.getString(c.getColumnIndex(KEY_MSG_SENDER))));
+                    if (msg.getSender().equals(getUsername()))
+                    {
+                        msg.setIsMine(true);
+                    }
+                    else
+                    {
+                        msg.setIsMine(false);
+                    }
+
+
+                    msg.setReceiver((c.getString(c.getColumnIndex(KEY_MSG_RECIEVER))));
                     msg.setBody((c.getString(c.getColumnIndex(KEY_MSG_BODY))));
-                    msg.setSentTime(c.getString(c.getColumnIndex(KEY_MSG_SENTTIME)));
-                    msg.setRecvTime(c.getString(c.getColumnIndex(KEY_MSG_RECVTIME)));
-                    msg.setCreateTime(c.getString(c.getColumnIndex(KEY_MSG_CREATETIME)));
+                   // msg.setSentTime(c.getString(c.getColumnIndex(KEY_MSG_SENTTIME)));
+                    //msg.setRecvTime(c.getString(c.getColumnIndex(KEY_MSG_RECVTIME)));
+                   // msg.setCreateTime(c.getString(c.getColumnIndex(KEY_MSG_CREATETIME)));
+
+
+
+
 
                     // adding to ChatMessage ArrayList -AB
                     messages.add(msg);
@@ -230,6 +254,18 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     public String getPassword()
     {
         return "password";
+    }
+
+    public void fuckeverything()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String deleteAll = "DELETE FROM " + TABLE_MESSAGES;
+        db.execSQL(deleteAll);
+        db.delete(TABLE_SETTINGS, null,null);
+
+        db.close();
+
     }
 
 

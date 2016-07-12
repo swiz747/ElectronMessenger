@@ -301,7 +301,7 @@ public class MyXMPP {
     //TODO: this is where we can add status updates super easy -AB
     public String getRoster()
     {
-        String strFriends= "dildo@tritium,";
+        String strFriends= "";
         Log.d("GET ROSTER: ", strFriends);
 
         Roster roster = Roster.getInstanceFor(connection);
@@ -313,6 +313,33 @@ public class MyXMPP {
         }
         strFriends = strFriends.substring(0,strFriends.length());
         return strFriends;
+    }
+    public void addFriend(String friend,String name)
+    {
+        String strFriends= "";
+        Log.d("GET ROSTER: ", strFriends);
+
+        Roster roster = Roster.getInstanceFor(connection);
+        try {
+            if (connection.isAuthenticated()) {
+                roster.createEntry(friend,name,null);
+            }
+            else
+            {
+                login();
+            }
+
+        } catch (SmackException.NotLoggedInException e) {
+            e.printStackTrace();
+        } catch (SmackException.NoResponseException e) {
+            e.printStackTrace();
+        } catch (SmackException.NotConnectedException e) {
+            e.printStackTrace();
+        } catch (XMPPException.XMPPErrorException e) {
+            e.printStackTrace();
+        }
+
+
     }
     //TODO: add packet listener for friend requests -AB
     public class XMPPConnectionListener implements ConnectionListener {

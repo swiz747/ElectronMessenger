@@ -8,6 +8,8 @@ import fragments.Chats;
 import fragments.FriendsList;
 import fragments.SomethingElse;
 
+//TODO: DEPRECATED SHOULD BE REMOVED -AB
+
 /**
  * Created by Arthur on 6/8/2016.
  */
