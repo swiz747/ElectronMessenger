@@ -1,13 +1,17 @@
 package com.tritiumlabs.arthur.servertest;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -25,10 +29,9 @@ public class MainActivity extends AppCompatActivity
     private boolean mBounded = false;
 
     private MyService mService;
+    private NotificationCompat.Builder notification;
+    private static final int uniqueID = 389234786;
 
-
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -39,6 +42,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        notification = new NotificationCompat.Builder(this);
+        notification.setAutoCancel(true);
 
 
 
@@ -77,6 +83,24 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
            // LocalDBHandler handler = LocalDBHandler.getInstance(this);
             //handler.getLocalSettings();
+
+            //notification stuff
+            notification.setSmallIcon(R.drawable.message);
+            notification.setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.colored_message));
+            notification.setTicker("im a ticker");
+            notification.setWhen(System.currentTimeMillis());
+            notification.setContentTitle("Im The Title, Nigga");
+            notification.setContentText("Im the body of the notification!");
+            Intent intent = new Intent(this, MainActivity.class);
+            PendingIntent pendIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+            notification.setContentIntent(pendIntent);
+
+            // issues notification
+            NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            nm.notify(uniqueID, notification.build());
+
+
             return true;
         }
         else if (id == R.id.fuck_everything)

@@ -29,7 +29,15 @@ public class FriendslistAdapter extends BaseAdapter {
         inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        friendlist = new ArrayList(Arrays.asList(friendString.split(",")));
+        if (friendString.equals("") || friendString.equals(","))
+        {
+            friendString = "NFPH";
+        }
+        else
+        {
+            friendlist = new ArrayList<String>(Arrays.asList(friendString.split(",")));
+        }
+
 
         Log.d(TAG, "uh idk maybe: " + friendString);
 

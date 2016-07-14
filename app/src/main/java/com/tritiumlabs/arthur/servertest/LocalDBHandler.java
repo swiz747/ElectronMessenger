@@ -20,7 +20,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     // Database Name
     //TODO: Change Name to be relevant -AB
     private static final String DATABASE_NAME = "RoundAbout";
-    //  table names
+    // table names
     private static final String TABLE_MESSAGES = "messages";
     private static final String TABLE_SETTINGS = "settings";
 
