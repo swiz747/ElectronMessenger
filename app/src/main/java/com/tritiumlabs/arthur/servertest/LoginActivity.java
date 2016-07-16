@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //TODO: this is for easy testing because im lazy -AB
         userName.setText("phoneapp");
-        passwordText.setText("password");
+        passwordText.setText("DifferentPass747");
 
         xmppConnection = MyXMPP.getInstance(this);
 
@@ -175,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
             userName.setError(null);
         }
 
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
+        if (password.isEmpty() || password.length() < 4 || password.length() > 20) {
             passwordText.setError("between 4 and 10 alphanumeric characters");
             valid = false;
         } else {
