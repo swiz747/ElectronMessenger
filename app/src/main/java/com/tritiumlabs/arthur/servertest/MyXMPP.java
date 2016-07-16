@@ -26,9 +26,14 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smackx.receipts.DeliveryReceiptManager;
 import org.jivesoftware.smackx.receipts.ReceiptReceivedListener;
+import org.jivesoftware.smackx.search.ReportedData;
+import org.jivesoftware.smackx.search.UserSearchManager;
+import org.jivesoftware.smackx.xdata.Form;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 import fragments.Chats;
 
@@ -314,15 +319,13 @@ public class MyXMPP {
         strFriends = strFriends.substring(0,strFriends.length());
         return strFriends;
     }
-    public void addFriend(String friend,String name)
+    public void addFriend(String friend)
     {
-        String strFriends= "";
-        Log.d("GET ROSTER: ", strFriends);
 
         Roster roster = Roster.getInstanceFor(connection);
         try {
             if (connection.isAuthenticated()) {
-                roster.createEntry(friend,name,null);
+                roster.createEntry(friend,null,null);
             }
             else
             {
@@ -338,6 +341,42 @@ public class MyXMPP {
         } catch (XMPPException.XMPPErrorException e) {
             e.printStackTrace();
         }
+
+
+    }
+    public ArrayList<Friend> searchUsers(String userName)
+    {
+        ArrayList<Friend> searchList = new ArrayList<Friend>();
+
+        UserSearchManager userSearchManager = new UserSearchManager(connection);
+        Form searchForm = null;
+        try {
+            searchForm = userSearchManager.getSearchForm("search." + connection.getServiceName());
+        } catch (SmackException.NoResponseException e) {
+            e.printStackTrace();
+        } catch (XMPPException.XMPPErrorException e) {
+            e.printStackTrace();
+        } catch (SmackException.NotConnectedException e) {
+            e.printStackTrace();
+        }
+        Form answerForm = searchForm.createAnswerForm();
+        answerForm.setAnswer("Name", true);
+        answerForm.setAnswer("search", "test"); // here i'm passsing the Text value to search
+
+        ReportedData resultData = null;
+        try {
+            resultData = userSearchManager.getSearchResults(answerForm, "search."+ connection.getServiceName());
+        } catch (SmackException.NoResponseException e) {
+            e.printStackTrace();
+        } catch (XMPPException.XMPPErrorException e) {
+            e.printStackTrace();
+        } catch (SmackException.NotConnectedException e) {
+            e.printStackTrace();
+        }
+
+
+
+        return searchList;
 
 
     }
